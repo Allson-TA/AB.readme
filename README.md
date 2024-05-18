@@ -1,0 +1,95 @@
+# AB.readme<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>隨機分隊工具</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .results {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>隨機分隊工具</h1>
+        <input type="text" id="namesInput" placeholder="輸入名稱，用空格分隔">
+        <button onclick="assignTeams()">分隊</button>
+        <div class="results" id="results"></div>
+    </div>
+    <script>
+        // 加載已保存的名稱
+        document.addEventListener("DOMContentLoaded", function() {
+            const savedNames = localStorage.getItem("names");
+            if (savedNames) {
+                document.getElementById("namesInput").value = savedNames;
+            }
+        });
+
+        function assignTeams() {
+            let names = document.getElementById("namesInput").value.split(' ');
+            names = names.map(name => name.trim()).filter(name => name !== "");
+            if (names.length < 2) {
+                alert("請輸入至少兩個名字");
+                return;
+            }
+
+            // 保存名稱到本地存儲
+            localStorage.setItem("names", document.getElementById("namesInput").value);
+
+            names.sort(() => Math.random() - 0.5);
+
+            let team1 = [];
+            let team2 = [];
+
+            names.forEach((name, index) => {
+                if (index % 2 === 0) {
+                    team1.push(name);
+                } else {
+                    team2.push(name);
+                }
+            });
+
+            document.getElementById("results").innerHTML = `
+                <h2>分隊結果</h2>
+                <p><strong>隊伍 1:</strong> ${team1.join(', ')}</p>
+                <p><strong>隊伍 2:</strong> ${team2.join(', ')}</p>
+            `;
+        }
+    </script>
+</body>
+</html>
